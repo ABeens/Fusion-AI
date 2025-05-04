@@ -1,0 +1,5 @@
+flask
+openai-whisper
+pyaudio
+ffmpeg-python
+flask-restx

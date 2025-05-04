@@ -1,0 +1,12 @@
+import whisper
+
+from config import WHISPER_MODEL
+
+model = whisper.load_model(WHISPER_MODEL)
+
+def transcribe_audio(filename):
+    result = model.transcribe(filename)
+    return {
+        "idioma_detectado": result["language"],
+        "transcripcion": result["text"]
+    }
