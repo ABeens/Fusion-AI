@@ -1,5 +1,5 @@
 flask
-openai-whisper
+openai-whisper==1.0.0
 pyaudio
 ffmpeg-python
 flask-restx
