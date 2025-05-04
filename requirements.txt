@@ -4,3 +4,4 @@ flask
 #ffmpeg-python
 flask-restx
 SpeechRecognition
+gunicorn
