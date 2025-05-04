@@ -1,5 +1,6 @@
 flask
-openai-whisper==1.0.0
+#openai-whisper
 pyaudio
-ffmpeg-python
+#ffmpeg-python
 flask-restx
+SpeechRecognition

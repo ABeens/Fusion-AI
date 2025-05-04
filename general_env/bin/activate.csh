@@ -9,17 +9,17 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/abrahambeens/Documents/DEV/Personal/Codigos/fusion-hit-AI/general_env"
+setenv VIRTUAL_ENV /Users/abrahambeens/Documents/DEV/Personal/Codigos/fusion-hit-AI/Fusion-AI/general_env
 
 set _OLD_VIRTUAL_PATH="$PATH"
-setenv PATH "$VIRTUAL_ENV/bin:$PATH"
+setenv PATH "$VIRTUAL_ENV/"bin":$PATH"
+setenv VIRTUAL_ENV_PROMPT general_env
 
 
 set _OLD_VIRTUAL_PROMPT="$prompt"
 
 if (! "$?VIRTUAL_ENV_DISABLE_PROMPT") then
-    set prompt = "(general_env) $prompt"
-    setenv VIRTUAL_ENV_PROMPT "(general_env) "
+    set prompt = "("general_env") $prompt:q"
 endif
 
 alias pydoc python -m pydoc

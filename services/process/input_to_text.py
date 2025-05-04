@@ -1,12 +1,17 @@
-import whisper
+import speech_recognition as sr
 
-from config import WHISPER_MODEL
-
-model = whisper.load_model(WHISPER_MODEL)
 
 def transcribe_audio(filename):
-    result = model.transcribe(filename)
-    return {
-        "idioma_detectado": result["language"],
-        "transcripcion": result["text"]
-    }
+    r = sr.Recognizer()
+    #audio = r.listen(filename)
+    with sr.AudioFile(filename) as source:
+        audio = r.record(source) 
+
+    try:
+        texto = r.recognize_google(audio, language="es-ES")
+        print("Has dicho: " + texto)
+    except sr.UnknownValueError:
+        print("No se entendió lo que dijiste.")
+    except sr.RequestError as e:
+        print(f"Error de conexión: {e}")
+    return texto
