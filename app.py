@@ -1,47 +1,43 @@
-from flask import Flask, Blueprint, jsonify, request
-from flask_restx import Api, Resource, reqparse
+from flask import Flask, Blueprint, request
+from flask_restx import Api, Resource
 from services.process.input_to_text import transcribe_audio
 import os
-from config import AUDIO_FILENAME
+import tempfile
 
-# Crear la aplicación Flask
 app = Flask(__name__)
-
-# Crear la API Flask-RESTX
 api = Api(app, version='1.0', title='API de Transcripción',
           description='Una API para la transcripción de audio')
 
-# Crear el Blueprint
 transcribe_bp = Blueprint('transcribe_bp', __name__)
 
-# Crear la clase de recursos para Flask-RESTX
 class Transcribir(Resource):
     def post(self):
-        # Obtener el archivo de la solicitud
-        file = request.files.get("file")
+        if 'file' not in request.files:
+            return {"error": "No se recibió ningún archivo"}, 400
 
-        if not file:
-            return jsonify({"error": "No se recibió ningún archivo"}), 400
+        file = request.files['file']
+        if file.filename == '':
+            return {"error": "Nombre de archivo vacío"}, 400
 
-        # Guardar el archivo temporalmente
-        filepath = "temp_audio.wav"
-        file.save(filepath)
+        try:
+            # Crear un archivo temporal con permisos
+            with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as temp_file:
+                filepath = temp_file.name
+                file.save(filepath)
+            
+            # Procesar la transcripción
+            resultado = transcribe_audio(filepath)
+        except Exception as e:
+            return {"error": f"Error al procesar el audio: {str(e)}"}, 500
+        finally:
+            # Asegurarse de eliminar el archivo temporal
+            if 'filepath' in locals() and os.path.exists(filepath):
+                os.unlink(filepath)
 
-        # Procesar la transcripción del audio
-        resultado = transcribe_audio(filepath)
+        return {"transcripcion": resultado}
 
-        # Eliminar archivo temporal después de procesar
-        os.remove(filepath)
-
-        # Devolver la transcripción en formato JSON
-        return jsonify({"transcripcion": resultado})
-
-# Registrar la clase de recursos en la API
 api.add_resource(Transcribir, '/transcribe')
-
-# Registrar el Blueprint en la app (si deseas usar blueprints)
 app.register_blueprint(transcribe_bp)
 
 if __name__ == '__main__':
-    # Iniciar la aplicación Flask
     app.run(debug=True)

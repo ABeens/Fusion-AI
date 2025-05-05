@@ -22,7 +22,7 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-# Comando para ejecutar tu aplicación
+# Comando para ejecutar tu aplicación en render
 #CMD ["python", "app.py"]
 
 #Para huggingface
