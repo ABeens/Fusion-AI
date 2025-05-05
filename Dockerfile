@@ -21,5 +21,15 @@ COPY . /app
 # Instalar las dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
+
 # Comando para ejecutar tu aplicación
-CMD ["python", "app.py"]
+#CMD ["python", "app.py"]
+
+#Para huggingface
+
+ENV FLASK_APP=wsgi.py
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=7860
+
+# Ejecutar el comando para iniciar Flask
+CMD ["flask", "run"]
